@@ -1,4 +1,5 @@
 import torch
+import torch.nn.functional as F
 from torch.utils.data import Dataset
 import pandas as pd
 import random
@@ -19,10 +20,6 @@ def one_hot_encode(seq):
 	one_hot = F.one_hot(tensor, num_classes=4).float() # 5 = a+t+g+c+n
 
 	return one_hot.transpose(0,1)
-
-
-def reverse_complement(seq):
-    return "".join(complement[x] for x in reversed(seq))
 
 class DNADataset(Dataset):
 	def __init__(self,file, mean_reg=None, std_reg=None, augment=False):
