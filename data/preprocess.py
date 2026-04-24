@@ -1,6 +1,7 @@
 import torch
 from torch.utils.data import Dataset
 import pandas as pd
+import random
 
 mapping = {"A":0, "T":1, "C":2, "G":3}
 
