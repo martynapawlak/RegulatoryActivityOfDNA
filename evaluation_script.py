@@ -12,7 +12,7 @@ def evaluate(test_path, model_path):
 	checkpoint = torch.load(model_path, map_location=device,weights_only=False)
 
 	model = DNAMultitaskModel()
-	model.load_state_dict(torch.load(model_path, map_location=device))
+	model.load_state_dict(checkpoint['model_state_dict'])
 	model.to(device)
 	model.eval()
 
