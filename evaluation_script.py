@@ -9,10 +9,16 @@ from data.preprocess import one_hot_encode
 def evaluate(test_path, model_path):
 	device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+	checkpoint = torch.load(model_path, map_location=device)
+
 	model = DNAMultitaskModel()
 	model.load_state_dict(torch.load(model_path, map_location=device))
 	model.to(device)
 	model.eval()
+
+	train_mean = checkpoint['train_mean']
+	train_std = checkpoint['train_std']
+
 	try:
 		df = pd.read_csv(test_path, sep='\t')
 	except Exception as e:
@@ -27,7 +33,8 @@ def evaluate(test_path, model_path):
 			out_class, out_reg = model(seq_tensor)
 			class_prob = out_class.squeeze().item()
 			predicted_is_active = 1 if class_prob > 0.5 else 0
-			predicted_rna_dna_ratio = out_reg.squeeze().item()
+			normalized_ratio = out_reg.squeeze().item()
+			predicted_rna_dna_ratio = (normalized_ratio * train_std) + train_mean
 			print(f"{seq_id}\t{predicted_is_active}\t{predicted_rna_dna_ratio}")
 
 if __name__ == "__main__":
