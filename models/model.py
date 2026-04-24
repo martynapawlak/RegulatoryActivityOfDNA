@@ -1,3 +1,6 @@
+import torch
+import torch.nn as nn
+
 class DNAMultitaskModel(nn.Module):
     def __init__(self):
       super(DNAMultitaskModel, self).__init__()
