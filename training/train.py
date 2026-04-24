@@ -94,7 +94,7 @@ def training_loop_CNN(train_path, val_path, epochs, lr=0.0001, batch_size=64):
     if val_loss < best_val_loss:
       best_val_loss=val_loss
       checkpoint={'model_state_dict': model.state_dict(),'train_mean': mean_reg,'train_std': std_reg}
-      torch.save(checkpoint.state_dict(), 'dna_model.pt')
+      torch.save(checkpoint, 'dna_model.pt')
       print(f"best new model saved !! :)")
 
     # computing the metrics
