@@ -4,6 +4,23 @@ from torch.utils.data import Dataset
 import pandas as pd
 import random
 
+mapping = {"A":0, "T":1, "C":2, "G":3}
+
+complement = {"A": "T", "T": "A", "C": "G", "G": "C"}
+
+def reverse_complement(seq):
+    return "".join(complement[x] for x in reversed(seq))
+
+def one_hot_encode(seq):
+	mapped = []
+	for x in seq:
+		emb = mapping[x]
+		mapped.append(emb)
+	tensor = torch.tensor(mapped, dtype=torch.long)
+	one_hot = F.one_hot(tensor, num_classes=4).float() # 5 = a+t+g+c+n
+
+	return one_hot.transpose(0,1)
+
 
 class DNADataset(Dataset):
 	def __init__(self,file, mean_reg=None, std_reg=None, augment=False):
@@ -18,22 +35,6 @@ class DNADataset(Dataset):
 
 		if mean_reg is not None:
 			self.y_reg = (self.y_reg - mean_reg) / std_reg
-
-		mapping = {"A":0, "T":1, "C":2, "G":3}
-
-		complement = {"A": "T", "T": "A", "C": "G", "G": "C"}
-	def reverse_complement(seq):
-    	return "".join(complement[x] for x in reversed(seq))
-
-	def one_hot_encode(seq):
-		mapped = []
-		for x in seq:
-			emb = mapping[x]
-			mapped.append(emb)
-		tensor = torch.tensor(mapped, dtype=torch.long)
-		one_hot = F.one_hot(tensor, num_classes=4).float() # 5 = a+t+g+c+n
-
-		return one_hot.transpose(0,1)
 
 
 	def __len__(self):
