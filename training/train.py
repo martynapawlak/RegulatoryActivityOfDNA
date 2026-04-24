@@ -1,11 +1,13 @@
-
+import torch
+import torch.nn as nn
+import pandas as pd
+from torch.utils.data import DataLoader
 from torchmetrics import Accuracy, R2Score
+from data.preprocess import DNADataset
+from models.model import DNAMultitaskModel
 
 
-train_path = "/content/drive/MyDrive/data/project1DL/train.tsv"
-val_path = "/content/drive/MyDrive/data/project1DL/val.tsv"
-
-def training_loop_CNN(train_path, val_path, epochs=100, lr=0.0001, batch_size=64):
+def training_loop_CNN(train_path, val_path, epochs, lr=0.0001, batch_size=64):
 
   train_df = pd.read_csv(train_path, sep="\t")
 
@@ -90,9 +92,9 @@ def training_loop_CNN(train_path, val_path, epochs=100, lr=0.0001, batch_size=64
     valid_losses.append(val_loss)
 
     if val_loss < best_val_loss:
-    	best_val_loss=val_loss 
-		torch.save(model.state_dict(), 'dna_model.pt')
-		print(f"best new model saved !! :)")
+    	best_val_loss=val_loss
+      torch.save(model.state_dict(), 'dna_model.pt')
+      print(f"best new model saved !! :)")
 
     # computing the metrics
     val_acc = accuracy_metric.compute()
@@ -106,16 +108,5 @@ def training_loop_CNN(train_path, val_path, epochs=100, lr=0.0001, batch_size=64
 
   return model, train_losses, valid_losses
 
-
-model,train_losses, valid_losses = training_loop_CNN(train_path, val_path)
-
-
-# simple plot
-plt.plot(train_losses, label='train')
-plt.plot(valid_losses, label='validation')
-plt.xlabel("Epochs")
-plt.ylabel("Loss")
-plt.title("Training and validation loss")
-plt.legend()
 
 
