@@ -9,7 +9,7 @@ from data.preprocess import one_hot_encode
 def evaluate(test_path, model_path):
 	device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-	checkpoint = torch.load(model_path, map_location=device)
+	checkpoint = torch.load(model_path, map_location=device,weights_only=False)
 
 	model = DNAMultitaskModel()
 	model.load_state_dict(torch.load(model_path, map_location=device))
