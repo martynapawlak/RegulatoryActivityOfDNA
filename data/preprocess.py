@@ -17,7 +17,7 @@ def one_hot_encode(seq):
 		emb = mapping[x]
 		mapped.append(emb)
 	tensor = torch.tensor(mapped, dtype=torch.long)
-	one_hot = F.one_hot(tensor, num_classes=4).float() # 5 = a+t+g+c+n
+	one_hot = F.one_hot(tensor, num_classes=4).float()
 
 	return one_hot.transpose(0,1)
 
