@@ -1,6 +1,6 @@
 # Regulatory Activity of DNA
 
-I did the project as part of my deep learning course at university. All the description is included in the report_project1.pdf :).
+I did the project as part of my deep learning course at university. The full description is included in the report_project1.pdf :).
 
 ## Usage
 ```bash
